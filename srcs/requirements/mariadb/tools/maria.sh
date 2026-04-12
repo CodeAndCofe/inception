@@ -2,15 +2,14 @@
 set -e
 
 set -a
-
 source .env
 
 set +a
 
-ROOT_PASSWORD=$(cat ./secrets/db_root_password)
+ROOT_PASSWORD=$(cat ./secrets/db_root_password.txt)
 WP_DATABASE="${MYSQL_DATABASE}"
 WP_USER="${MYSQL_USER}"
-WP_PASSWORD=$(cat ./secrets/db_password)
+WP_PASSWORD=$(cat ./secrets/db_password.txt)
 
 if [ ! -d "/run/mysqld" ]; then
     mkdir -p /run/mysqld
@@ -35,7 +34,7 @@ else
         CREATE USER IF NOT EXISTS '$WP_USER'@'%' IDENTIFIED BY '$WP_PASSWORD';
         GRANT ALL PRIVILEGES ON $WP_DATABASE.* TO '$WP_USER'@'%';
         FLUSH PRIVILEGES;
-    EOF
+EOF
     
     mysqladmin -u root -p"$ROOT_PASSWORD" shutdown
     
