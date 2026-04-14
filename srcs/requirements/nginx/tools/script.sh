@@ -1,5 +1,8 @@
 #!/bin/bash
+set -e
 
-FILE=$(cat "ngx.cnf")
+echo "Starting Nginx..."
 
-echo $FILE > "nginx.conf"
+nginx -t
+
+exec "$@"
