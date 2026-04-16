@@ -27,4 +27,4 @@ RUN chown -R www-data:www-data /var/www/html && \
     chmod -R 755 /var/www/html
 
 
-CMD ["php-fpm8.4", "-F", "-R"]
+# CMD ["php-fpm8.4", "-F", "-R"]
