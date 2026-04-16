@@ -1,0 +1,112 @@
+# NGINX:
+
+#### What is NGINX?
+
+---
+
+NGINX is software that runs on a server and handles **HTTP requests** (and other types of traffic).
+
+A single server cannot handle an unlimited number of users/requests at the same time. When traffic grows, we usually add **multiple servers**.
+
+#### How can NGINX handle lots of requests?
+
+One common setup is to use NGINX as a **load balancer**.
+
+- You run **one NGINX instance in front** (the “load balancer”).
+- Behind it, you run **multiple backend servers** (your application servers).
+- The load balancer **decides which backend server** will handle each incoming request, based on a chosen strategy.
+
+Examples of load-balancing strategies:
+
+- **Round-robin**: send requests to servers one-by-one in order.
+- **Least connections**: send the request to the server with the fewest active connections.
+- **Geo-based routing**: route users to the nearest server/region (when configured).
+
+This helps your system handle more traffic and improves reliability (if one backend server fails, traffic can be sent to the others).
+
+### **What NGINX can handle too except handling multiple requests?**
+
+imagine one hundred of laptops want to get to see latest posts of news the laptops send request to the server the server send request to the database the database send response to server and  server send data to users . the main **problem is that happened hundreds** of times so what is the solution here? the nginx when the first time take response from database it cache data and then when the second user ask/request the same data the nginx take cached data and send it back to the user
+
+### What is NGINX Proxy significantly?
+
+blah blah blah blah
+
+### NGINX and Encryption:
+
+| Part | Meaning |
+| --- | --- |
+| `openssl` | The command-line tool for cryptography (OpenSSL) |
+| `req` | Request a certificate (Certificate Signing Request mode) |
+| `-x509` | Output a self-signed certificate instead of a request. X.509 is the standard format for certificates. |
+| `-nodes` | "No DES" – do not encrypt the private key with a passphrase. Without this, you would have to type a password every time Nginx starts. |
+| `-days 365` | The certificate will be valid for 365 days. After that, you need a new one. |
+| `-newkey rsa:2048` | Generate a new private key and public key pair using RSA algorithm with 2048-bit length. 2048 bits is considered secure today. |
+| `-keyout` | Where to save the private key file (keep this secret – only the server needs it) |
+| `-out` | Where to save the certificate file (public, sent to browsers) |
+| `-subj` | Subject – the identity information embedded in the certificate. It is a string of `/key=value` pairs. |
+
+## NGINX CONFIGURATION
+
+---
+
+#### directive:
+
+- In NGINX config, a **directive** is a single configuration instruction written as a **name plus one or more parameters**, and it usually ends with a semicolon: `;`.
+- **Where you put it matters:** directives apply inside the **context** they are written in, and some directives can be inherited by child contexts.
+- **Why directives matter:** they tell NGINX what to do, such as which port to listen on, where files live, how to route requests, and how to cache or proxy.
+- **Syntax (typical):** `directive_name value1 value2;`
+- **Common directive examples:**
+    - `listen 80;`
+    - `server_name example.com;`
+    - `root /var/www/html;`
+    - `proxy_pass http://backend;`
+
+**Example:**
+
+```jsx
+server {
+	listen 8080;
+	root /folder/etc/;
+}
+```
+
+#### contexts:
+
+- In NGINX config, a **context** is a block that groups directives, and **directives only affect the context they are inside**, unless they are inherited by child contexts.
+- Contexts are written with curly braces: `context_name { ... }`.
+- Common contexts:
+    - **main (global)**: directives at the very top of the file, outside any braces.
+    - **events { ... }**: connection processing (e.g., `worker_connections`).
+    - **http { ... }**: settings for HTTP traffic; inside it you usually define:
+        - **server { ... }**: one virtual server (a site). You can have many `server` blocks.
+        - **location { ... }**: rules for matching request URLs within a `server`.
+- **Inheritance (important):** many directives set in `http` are inherited by `server`, and from `server` to `location`, unless you override them. Example: if you set `gzip on;` in `http`, it typically applies to all servers and locations unless changed.
+- **Why contexts matter:** they let you apply configuration at the right level, such as “for all websites” (`http`), “for this website only” (`server`), or “for this URL path only” (`location`).
+
+**Example:**
+
+```
+http {
+	gzip on; # applies to all servers by default
+
+	server {
+		listen 80;
+		server_name example.com;
+
+		location /images/ {
+			expires 30d; # only for /images/
+		}
+	}
+}
+```
+
+### Certificate (public key + identity + signature):
+
+### Certificate Components
+
+**Public key:** A cryptographic key that can be shared openly; used to encrypt data or verify signatures created by the corresponding private key.
+
+**Identity:** Information embedded in the certificate that identifies who owns it (e.g., domain name, organization name, location) — the `/CN=`, `/O=`, `/C=` fields in the `-subj` parameter.
+
+**Signature:** A digital signature from a Certificate Authority (CA) that vouches for the certificate's authenticity. In self-signed certificates, the signature is created by the same entity that owns the certificate, so there's no external CA validation.

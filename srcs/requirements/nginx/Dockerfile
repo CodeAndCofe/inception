@@ -12,6 +12,8 @@ RUN mkdir -p /etc/nginx/ssl && \
     -out /etc/nginx/ssl/inception.crt \
     -subj "/C=MA/ST=Khouribga/L=Khouribga/O=1337/CN=aferryat.42.fr"
 
+#  x509 requset to create self signed certificate with -x509 formate (spoiler there many other formate but this is standart and most used in applications like http and vpn etc)
+# other signed formate is PEM base 64 text formate
 
 COPY ./conf/ngx.cnf /etc/nginx/conf.d/default.conf
 COPY ./tools/script.sh /usr/local/bin/entrypoint.sh
