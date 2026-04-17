@@ -1,0 +1,5 @@
+services:
+	wordPress:
+		build:
+			context: ./requirements/wordpress
+			dockerfile: Dockerfile

@@ -7,9 +7,9 @@ source .env
 set +a
 
 ROOT_PASSWORD=$(cat ./secrets/db_root_password.txt)
-WP_DATABASE="${MYSQL_DATABASE}"
-WP_USER="${MYSQL_USER}"
-WP_PASSWORD=$(cat ./secrets/db_password.txt)
+DB_DATABASE="${MYSQL_DATABASE}"
+DB_USER="${MYSQL_USER}"
+DB_PASSWORD=$(cat ./secrets/db_password.txt)
 
 if [ ! -d "/run/mysqld" ]; then
     mkdir -p /run/mysqld
