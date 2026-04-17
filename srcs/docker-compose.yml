@@ -1,5 +1,44 @@
 services:
-	wordPress:
-		build:
-			context: ./requirements/wordpress
-			dockerfile: Dockerfile
+  wordPress:
+    build: ./requirements/wordpress
+    volumes:
+      - wordpress_VOLUME:/var/www/html
+    networks:
+      - webapp
+  nginx:
+    build: ./requirements/nginx
+    ports:
+      - "8080:80"
+    networks:
+      - webapp
+
+  mariadb:
+    build: ./requirements/mariadb
+    networks:
+      - webapp
+    volumes:
+      - mariadb_VOLUME:/var/lib/mysql
+    environment:
+      DB_USERNAME: ${DB_NAME}
+      DB_DB: ${DB_DATABASE}
+      DB_PASSWORD: /run/secrets/db_password
+      DB_ROOT_PASSWORD: /run/secrets/db_root_password
+
+
+
+networks:
+  webapp:
+
+
+volumes:
+  wordpress_VOLUME:
+  mariadb_VOLUME:
+  
+
+
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  db_roo_password:
+    file: ./secrets/db_root_password.txt
