@@ -1,16 +1,22 @@
-FROM	debian:trixie-slim
+FROM debian:trixie-slim
 
+WORKDIR /app
 
+RUN apt update -y && apt install nginx openssl -y && rm -rf /var/lib/apt/lists/*
 
-RUN apt update -y && apt install nginx -y && apt install openssl -y
+COPY ./conf/* /etc/nginx/conf.d
 
+RUN mkdir -p /etc/nginx/ssl
 
 RUN openssl req -x509 -newkey rsa:4096 -days 3650 \
-    -noenc -keyout private.key -out certificate.crt -subj "/CN=Morocco.com" \
+    -nodes -keyout /etc/nginx/ssl/inception.key \
+    -out /etc/nginx/ssl/inception.crt \
+    -subj "/CN=Morocco.com"
 
+COPY ./tools/script.sh /app/tool.sh
+RUN chmod +x /app/tool.sh
 
 EXPOSE 443
 
-
-
-
+ENTRYPOINT ["/app/tool.sh"]
+CMD ["nginx", "-g", "daemon off;"]
