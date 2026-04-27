@@ -1,4 +1,3 @@
 
 
-
 service mariadb start

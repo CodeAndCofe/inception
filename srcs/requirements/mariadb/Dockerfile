@@ -11,4 +11,6 @@ COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/custom.cnf
 COPY    ./tools/maria.sh /app/script.sh
 
 RUN chmod +x /app/script.sh
+
+
 ENTRYPOINT [ "/app/script.sh" ]
