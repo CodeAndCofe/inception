@@ -1,22 +1,19 @@
-server {
-    listen 443 ssl;
-    server_name aferryat.42.fr;
+http
+{
+    include /etc/nginx/mime.types;
 
-    ssl_certificate     /etc/nginx/ssl/inception.crt;
-    ssl_certificate_key /etc/nginx/ssl/inception.key;
-    ssl_protocols       TLSv1.2 TLSv1.3;
+    server
+    {
+        listen 443 ssl;
+        server_name aferryat.42.fr;
+        root /var/www/;
+        index index.html;
 
-    root /var/www/html;
-    index index.php index.html;
-
-    location / {
-        try_files $uri $uri/ =404;
-    }
-
-    location ~ \.php$ {
-        include fastcgi_params;
-        fastcgi_pass wordpress:9000;
-        fastcgi_index index.php;
-        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        ssl_certificate /etc/nginx/ssl/aferryat.42.fr.crt;
+        ssl_certificate_key /etc/nginx/ssl/aferryat.42.fr.key;
+        ssl_protocols TLSv1.2 TLSv1.3;
+        location / {
+                try_files $uri $uri/ =404;
+        }
     }
 }
