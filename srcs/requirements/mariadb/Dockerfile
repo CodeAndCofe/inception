@@ -3,7 +3,8 @@ FROM debian:trixie-slim
 WORKDIR /app
 
 RUN apt-get update -y && \
-    apt-get install -y mariadb-server mariadb-client
+    apt-get install -y mariadb-server mariadb-client \
+    && rm -rf /var/lib/apt/lists/*
 
 EXPOSE 3306
 
