@@ -23,7 +23,7 @@ mysqld --user=mysql --skip-networking &
 until mysqladmin ping --silent; do
     sleep 1
 done
-if [ ! -d "/var/lib/mysql/mysql" ]; then
+if [ ! -d "" ]; then
 mysql -u root <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';
 

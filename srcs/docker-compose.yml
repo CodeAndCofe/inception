@@ -1,8 +1,44 @@
 services:
     mariadb:
-    wordPres:
+        build: ./requirements/mariadb
+        volumes:
+            - DB:/var/lib/mysql/mysql
+        networks:
+            - networkapp
+    wordPress:
+        build: ./requirements/wordpress
         depends_on:
             - mariadb
+        volumes:
+            - wordPres:/var/www/html
+        networks:
+            - networkapp
     nginx:
+        build: ./requirements/nginx
         depends_on:
             - wordPress
+        volumes:
+            -wordPres:/var/www/html
+        networks:
+            - networkapp
+
+
+
+
+volumes:
+  wordpress:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/login/data/wordpress
+  db:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /home/login/data/mariadb
+
+networks:
+    networkapp:
+        driver: bridge

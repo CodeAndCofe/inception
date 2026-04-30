@@ -2,12 +2,12 @@ FROM debian:trixie-slim
 
 WORKDIR /app
 
-RUN apt update -y && apt install -y curl  php less
+RUN apt update -y && apt install -y curl  php less  php-fpm
 
 RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar
 
 RUN chmod +x wp-cli.phar
-RUN mv wp-cli.phar /usr/local/bin/wp
+RUN mv wp-cli.phar /usr/local/bin/WP
 RUN useradd -m app
 
 COPY ./tools/wordPress.sh /app/script.sh
@@ -18,7 +18,7 @@ RUN chown -R app:app /var/www/html
 
 USER app
 
-EXPOSE 443
+EXPOSE 9000
 
 
-# ENTRYPOINT [ "script.sh" ]
+ENTRYPOINT [ "script.sh" ]
