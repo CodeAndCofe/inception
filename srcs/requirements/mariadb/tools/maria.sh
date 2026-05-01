@@ -2,18 +2,8 @@
 
 set -e
 
-
-# ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
-# WP_USER="${MYSQL_USER}"          
-# WP_PASSWORD=$(cat /run/secrets/db_password) 
-
-
-#temporary
-
-ROOT_PASSWORD=ABCBCBC
-WP_USER=adil
-WP_PASSWORD=AVCD
-DB_NAME=wp
+ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
+WP_PASSWORD=$(cat /run/secrets/db_password)
 
 mkdir -p /run/mysqld
 chown mysql:mysql /run/mysqld

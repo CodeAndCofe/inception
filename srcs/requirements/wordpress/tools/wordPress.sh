@@ -1,14 +1,6 @@
 #!bin/bash
-WP_USER="adil"
-DB_USER="adil"
-DB_PASS="pass"
-DB_NAME="wp"
-DB_HOST="mariadb"
-WP_URL=https://aferryat.42.ft.com
-WP_TITLE=Blog
-WP_ADMIN_USER=aferryat
-WP_ADMIN_PASSWORD=33333333
-WP_ADMIN_EMAIL=adilprogrammer@gmail.com
+DB_PASS=$(cat /run/secrets/db_password)
+WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_password)
 
 cd /var/www/html
 

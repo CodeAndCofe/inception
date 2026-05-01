@@ -1,11 +1,13 @@
 services:
     mariadb:
+        env_file: .env
         build: ./requirements/mariadb
         volumes:
             - DB:/var/lib/mysql/mysql
         networks:
             - networkapp
     wordPress:
+        env_file: .env
         build: ./requirements/wordpress
         depends_on:
             - mariadb
@@ -14,6 +16,7 @@ services:
         networks:
             - networkapp
     nginx:
+        env_file: .env
         build: ./requirements/nginx
         depends_on:
             - wordPress
@@ -21,7 +24,6 @@ services:
             -wordPres:/var/www/html
         networks:
             - networkapp
-
 
 
 
@@ -42,3 +44,11 @@ volumes:
 networks:
     networkapp:
         driver: bridge
+
+secrets:
+    db_password:
+        file: ../secrets/db_password.txt
+    db_root_password:
+        file: ../secrets/db_root_password
+    wp_password:
+        file: ../secrets/credentials
