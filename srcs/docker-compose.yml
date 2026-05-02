@@ -1,14 +1,18 @@
 services:
   mariadb:
-    env_file: .env
+    env_file: ../.env
     build: ./requirements/mariadb
     volumes:
       - db:/var/lib/mysql
     networks:
       - networkapp
+    restart: always
+    secrets:
+      - db_root_password
+      - db_password
 
   wordpress:
-    env_file: .env
+    env_file: ../.env
     build: ./requirements/wordpress
     depends_on:
       - mariadb
@@ -16,16 +20,23 @@ services:
       - wordpress:/var/www/html
     networks:
       - networkapp
+    restart: always
+    secrets:
+      - db_password
+      - wp_password
 
   nginx:
-    env_file: .env
+    env_file: ../.env
     build: ./requirements/nginx
     depends_on:
-      - wordpress
+      - mariadb
     volumes:
       - wordpress:/var/www/html
     networks:
       - networkapp
+    restart: always
+    ports:
+      - "443:443"
 
 volumes:
   wordpress:
@@ -33,14 +44,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/login/data/wordpress
+      device: /home/aferryat/data/wordpress
 
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/login/data/mariadb
+      device: /home/aferryat/data/mariadb
 
 networks:
   networkapp:
@@ -54,4 +65,4 @@ secrets:
     file: ../secrets/db_root_password.txt
 
   wp_password:
-    file: ../secrets/wp_password.txt
+    file: ../secrets/credentials.txt

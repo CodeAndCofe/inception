@@ -3,4 +3,6 @@ set -e
 
 echo "Starting Nginx..."
 
+nginx -t
+
 exec "$@"
