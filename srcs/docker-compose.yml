@@ -1,31 +1,31 @@
 services:
-    mariadb:
-        env_file: .env
-        build: ./requirements/mariadb
-        volumes:
-            - DB:/var/lib/mysql/mysql
-        networks:
-            - networkapp
-    wordPress:
-        env_file: .env
-        build: ./requirements/wordpress
-        depends_on:
-            - mariadb
-        volumes:
-            - wordPres:/var/www/html
-        networks:
-            - networkapp
-    nginx:
-        env_file: .env
-        build: ./requirements/nginx
-        depends_on:
-            - wordPress
-        volumes:
-            -wordPres:/var/www/html
-        networks:
-            - networkapp
+  mariadb:
+    env_file: .env
+    build: ./requirements/mariadb
+    volumes:
+      - db:/var/lib/mysql
+    networks:
+      - networkapp
 
+  wordpress:
+    env_file: .env
+    build: ./requirements/wordpress
+    depends_on:
+      - mariadb
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - networkapp
 
+  nginx:
+    env_file: .env
+    build: ./requirements/nginx
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - networkapp
 
 volumes:
   wordpress:
@@ -34,6 +34,7 @@ volumes:
       type: none
       o: bind
       device: /home/login/data/wordpress
+
   db:
     driver: local
     driver_opts:
@@ -42,13 +43,15 @@ volumes:
       device: /home/login/data/mariadb
 
 networks:
-    networkapp:
-        driver: bridge
+  networkapp:
+    driver: bridge
 
 secrets:
-    db_password:
-        file: ../secrets/db_password.txt
-    db_root_password:
-        file: ../secrets/db_root_password
-    wp_password:
-        file: ../secrets/credentials
+  db_password:
+    file: ../secrets/db_password.txt
+
+  db_root_password:
+    file: ../secrets/db_root_password.txt
+
+  wp_password:
+    file: ../secrets/wp_password.txt

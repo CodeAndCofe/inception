@@ -1,6 +1,7 @@
 #!/bin/bash
-
 set -e
+
+echo "Starting MariaDB setup..."
 
 ROOT_PASSWORD=$(cat /run/secrets/db_root_password)
 WP_PASSWORD=$(cat /run/secrets/db_password)
@@ -10,11 +11,16 @@ chown mysql:mysql /run/mysqld
 
 mysqld --user=mysql --skip-networking &
 
+MYSQL_PID=$!
+
 until mysqladmin ping --silent; do
     sleep 1
 done
-if [ ! -d "" ]; then
-mysql -u root <<EOF
+
+if [ ! -d "/var/lib/mysql/mysql" ]; then
+    echo "Initializing database..."
+
+    mysql -u root <<EOF
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';
 
 CREATE DATABASE IF NOT EXISTS ${DB_NAME};
@@ -25,10 +31,15 @@ GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${WP_USER}'@'%';
 
 FLUSH PRIVILEGES;
 EOF
-fi
-mysqladmin -u root -p"$ROOT_PASSWORD" shutdown
 
-until ! mysqladmin ping --silent; do
-    sleep 1
-done
+    echo "Database initialized."
+else
+    echo "Database already exists. Skipping init."
+fi
+
+mysqladmin -u root -p"${ROOT_PASSWORD}" shutdown
+
+
+echo "Starting MariaDB in foreground..."
+
 exec mysqld --user=mysql
