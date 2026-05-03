@@ -5,8 +5,6 @@ echo "Starting WordPress setup..."
 
 DB_PASS=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_password)
-WP_USER_EMAIL=${WP_USER_EMAIL:-"$WP_ADMIN_EMAIL"}
-WP_USER_PASSWORD=${WP_USER_PASSWORD:-"$WP_ADMIN_PASSWORD"}
 
 mkdir -p /run/php /var/www/html
 chown -R www-data:www-data /run/php /var/www/html
@@ -62,11 +60,6 @@ else
     echo "WordPress already installed."
 fi
 
-echo "Starting PHP-FPM..."
-PHP_FPM_BIN="$(command -v php-fpm || command -v php-fpm8.2 || command -v php-fpm8.3 || true)"
-if [ -z "$PHP_FPM_BIN" ]; then
-    echo "ERROR: php-fpm binary not found"
-    exit 1
-fi
+echo "starting php"
 
-exec "$PHP_FPM_BIN" -F
+exec php-fpm8.4 -F
