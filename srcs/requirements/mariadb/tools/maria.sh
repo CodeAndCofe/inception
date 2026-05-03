@@ -9,7 +9,7 @@ DB_PASSWORD=$(cat /run/secrets/db_password)
 mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld /var/lib/mysql
 
-mysqld --user=mysql --bind-address=0.0.0.0 --port=3306 &
+service mariadb start
 
 until mysqladmin ping -h 127.0.0.1 --silent; do
     sleep 1
@@ -19,10 +19,10 @@ if [ ! -d "/var/lib/mysql/${DB_NAME}" ]; then
     echo "Initializing database..."
 
     mysql -u root <<EOF
-ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';
 CREATE DATABASE IF NOT EXISTS ${DB_NAME};
 CREATE USER IF NOT EXISTS '${DB_USER}'@'%' IDENTIFIED BY '${DB_PASSWORD}';
 GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
+ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';
 FLUSH PRIVILEGES;
 EOF
 
@@ -31,9 +31,8 @@ else
     echo "Database already exists."
 fi
 
-# Stop temporary server
 mysqladmin -u root -p"${ROOT_PASSWORD}" shutdown
 
-# Start real server (network enabled)
 echo "Starting MariaDB in foreground..."
-exec mysqld --user=mysql --bind-address=0.0.0.0 --port=3306
+
+exec mysqld_safe

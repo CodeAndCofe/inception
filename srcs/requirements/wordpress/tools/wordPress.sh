@@ -43,7 +43,9 @@ if [ ! -f wp-config.php ]; then
         --admin_password="$WP_ADMIN_PASSWORD" \
         --admin_email="$WP_ADMIN_EMAIL" \
         --allow-root
+    chown -R  www-data:www-data /var/www/html
 fi
 
 echo "Starting PHP-FPM..."
+
 exec php-fpm8.4 -F

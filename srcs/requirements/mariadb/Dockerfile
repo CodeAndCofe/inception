@@ -11,6 +11,8 @@ RUN apt-get update -y && \
 
 EXPOSE 3306
 
+COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf 
+
 COPY ./tools/maria.sh /app/script.sh
 
 RUN chmod +x /app/script.sh

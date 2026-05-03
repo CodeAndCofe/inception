@@ -14,10 +14,6 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-RUN useradd -m app
-
-RUN mkdir -p /var/www/html \
-    && chown -R app:app /var/www/html
 
 # IMPORTANT: runtime directory for PHP-FPM
 RUN mkdir -p /run/php
@@ -27,6 +23,7 @@ RUN chmod +x /app/script.sh
 
 # Only needed change
 RUN sed -i 's|listen = .*|listen = 9000|' /etc/php/*/fpm/pool.d/www.conf
+RUN sed -i 's|;clear_env = no|clear_env = no|' /etc/php/*/fpm/pool.d/www.conf
 
 EXPOSE 9000
 
