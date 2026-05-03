@@ -29,7 +29,7 @@ services:
     env_file: ../.env
     build: ./requirements/nginx
     depends_on:
-      - mariadb
+      - wordpress
     volumes:
       - wordpress:/var/www/html
     networks:
@@ -44,14 +44,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: /home/aferryat/data/wordpress
+      device: ${HOME}/data/wordpress
 
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: /home/aferryat/data/mariadb
+      device: ${HOME}/data/mariadb
 
 networks:
   networkapp:

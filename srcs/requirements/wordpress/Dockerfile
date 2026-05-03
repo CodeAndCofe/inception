@@ -25,5 +25,4 @@ RUN sed -i 's|;clear_env = no|clear_env = no|' /etc/php/*/fpm/pool.d/www.conf
 
 EXPOSE 9000
 
-USER www-data
 ENTRYPOINT ["/app/script.sh"]

@@ -9,7 +9,12 @@
 
 
 # docker compose restart ::restart services
-run:
+prepare:
+	mkdir -p $$HOME/data/mariadb $$HOME/data/wordpress
+
+run: prepare
+	# ensure a working .env exists for compose
+	[ -f .env ] || cp .env.example .env
 	docker compose  -f ./srcs/docker-compose.yml up -d --build
 
 down:
