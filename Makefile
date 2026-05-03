@@ -1,5 +1,4 @@
 
-
 # docker compose up ::start container
 # docker compose down ::stop container
 
@@ -22,5 +21,6 @@ clean:
 restart:
 	docker compose -f ./srcs/docker-compose.yml restart
 
-
+logs:
+	docker compose -f ./srcs/docker-compose.yml logs
 re: clean run

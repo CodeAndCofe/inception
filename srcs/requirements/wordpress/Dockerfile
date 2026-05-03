@@ -14,17 +14,16 @@ RUN curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli
     && chmod +x wp-cli.phar \
     && mv wp-cli.phar /usr/local/bin/wp
 
-
-# IMPORTANT: runtime directory for PHP-FPM
-RUN mkdir -p /run/php
+RUN mkdir -p /run/php /var/www/html
+RUN chown -R www-data:www-data /var/www/html
 
 COPY ./tools/wordPress.sh /app/script.sh
 RUN chmod +x /app/script.sh
 
-# Only needed change
 RUN sed -i 's|listen = .*|listen = 9000|' /etc/php/*/fpm/pool.d/www.conf
 RUN sed -i 's|;clear_env = no|clear_env = no|' /etc/php/*/fpm/pool.d/www.conf
 
 EXPOSE 9000
 
+USER www-data
 ENTRYPOINT ["/app/script.sh"]
