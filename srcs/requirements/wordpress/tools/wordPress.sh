@@ -13,21 +13,23 @@ cd /var/www/html
 
 echo "Waiting for MariaDB..."
 
-READY=0
-for i in $(seq 1 30); do
-    if mysql -h mariadb -u "$DB_USER" -p"$DB_PASS" -e "SELECT 1;" >/dev/null 2>&1; then
-        echo "MariaDB is ready!"
-        READY=1
-        break
-    fi
-    echo "Waiting... ($i/30)"
-    sleep 2
-done
+# READY=0
 
-if [ "$READY" -eq 0 ]; then
-    echo "ERROR: MariaDB not reachable after 30 attempts"
-    exit 1
-fi
+# for i in $(seq 1 30); do
+#     if mysql -h mariadb -u "$DB_USER" -p"$DB_PASS" -e "SELECT 1;" >/dev/null 2>&1; then
+#         echo "MariaDB is ready!"
+#         READY=1
+#         break
+#     fi
+#     echo "Waiting... ($i/30)"
+#     sleep 2
+# done
+
+# if [ "$READY" -eq 0 ]; then
+#     echo "ERROR: MariaDB not reachable after 30 attempts"
+#     exit 1
+# fi
+
 
 if [ ! -f wp-config.php ]; then
     echo "Installing WordPress..."

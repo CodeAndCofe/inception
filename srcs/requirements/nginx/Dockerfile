@@ -1,4 +1,4 @@
-FROM debian:trixie-slim
+FROM debian:trixie-backports
 
 WORKDIR /app
 

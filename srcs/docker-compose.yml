@@ -44,14 +44,14 @@ volumes:
     driver_opts:
       type: none
       o: bind
-      device: ${HOME}/data/wordpress
+      device: "/home/aferryat/data/wordpress"
 
   db:
     driver: local
     driver_opts:
       type: none
       o: bind
-      device: ${HOME}/data/mariadb
+      device: "/home/aferryat/data/mariadb"
 
 networks:
   networkapp:
@@ -65,4 +65,4 @@ secrets:
     file: ../secrets/db_root_password.txt
 
   wp_password:
-    file: ../secrets/credentials.txt
+    file: ../secrets/wp_password.txt
