@@ -21,6 +21,7 @@ for i in $(seq 1 30); do
     echo "Waiting... ($i/30)"
     sleep 2
 done
+
 if [ ! -f wp-config.php ]; then
     echo "Installing WordPress..."
 
@@ -30,7 +31,7 @@ if [ ! -f wp-config.php ]; then
         --dbname="$DB_NAME" \
         --dbuser="$DB_USER" \
         --dbpass="$DB_PASS" \
-        --dbhost=mariadb \
+        --dbhost=mariadb \ echo "Waiting... ($i/30)"
         --allow-root
 
     wp core install \
@@ -48,8 +49,6 @@ if [ ! -f wp-config.php ]; then
             --display_name="Regular User" \
             --allow-root
     fi
-else
-    echo "WordPress already installed."
 fi
 
 echo "starting php"
