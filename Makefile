@@ -5,18 +5,18 @@ run:
 	@docker compose  -f ./srcs/docker-compose.yml up -d --build
 
 down:
-	docker compose -f ./srcs/docker-compose.yml down
+	@docker compose -f ./srcs/docker-compose.yml down
 
 clean:
-	docker compose -f ./srcs/docker-compose.yml down -v
+	@docker compose -f ./srcs/docker-compose.yml down -v
 
 fclean: clean
 	@sudo rm -rf /home/aferryat/data/*
 
 restart:
-	docker compose -f ./srcs/docker-compose.yml restart
+	@docker compose -f ./srcs/docker-compose.yml restart
 
 logs:
-	docker compose -f ./srcs/docker-compose.yml logs
+	@docker compose -f ./srcs/docker-compose.yml logs
 
-re: clean run
+re: fclean run

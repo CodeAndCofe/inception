@@ -8,8 +8,6 @@ RUN apt-get update -y && \
 
 EXPOSE 3306
 
-COPY ./conf/my.cnf /etc/mysql/mariadb.conf.d/50-server.cnf
-
 RUN chown root:root /etc/mysql/mariadb.conf.d/50-server.cnf \
     && chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
 

@@ -11,15 +11,8 @@ mkdir -p /run/mysqld
 chown -R mysql:mysql /run/mysqld
 chown -R mysql:mysql /var/lib/mysql
 
-# If database not initialized, run bootstrap
 if [ ! -f "/var/lib/mysql/.initialized" ]; then
-    echo "Initializing database (offline)..."
-
-    # Create system tables (if not already present)
     mariadb-install-db --user=mysql --datadir=/var/lib/mysql >/dev/null
-
-    # Use --bootstrap to run SQL without a running server
-    echo "creating user ...."
     mariadbd --bootstrap --user=mysql <<EOF
 USE mysql;
 FLUSH PRIVILEGES;
@@ -29,13 +22,7 @@ GRANT ALL PRIVILEGES ON ${DB_NAME}.* TO '${DB_USER}'@'%';
 ALTER USER 'root'@'localhost' IDENTIFIED BY '${ROOT_PASSWORD}';
 FLUSH PRIVILEGES;
 EOF
-
     touch /var/lib/mysql/.initialized
-    echo "Database initialized."
-else
-    echo "Database already initialized, skipping."
 fi
-
-echo "Starting MariaDB in foreground..."
 
 exec mariadbd --user=mysql --bind-address=0.0.0.0 --port=3306 --socket=/run/mysqld/mysqld.sock

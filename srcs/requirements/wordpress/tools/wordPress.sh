@@ -7,23 +7,17 @@ DB_PASS=$(cat /run/secrets/db_password)
 WP_ADMIN_PASSWORD=$(cat /run/secrets/wp_password)
 
 mkdir -p /run/php /var/www/html
-chown -R www-data:www-data /run/php /var/www/html
 
 cd /var/www/html
 
-echo "Waiting for MariaDB..."
-
 for i in $(seq 1 30); do
     if mysqladmin ping -h mariadb -u"$DB_USER" -p"$DB_PASS" --silent 2>/dev/null; then
-        echo "MariaDB is ready!"
         break
     fi
-    echo "Waiting... ($i/30)"
     sleep 2
 done
-if [ ! -f wp-config.php ]; then
-    echo "Installing WordPress..."
 
+if [ ! -f wp-config.php ]; then
     wp core download --allow-root
 
     wp config create \
@@ -41,17 +35,12 @@ if [ ! -f wp-config.php ]; then
         --admin_email="$WP_ADMIN_EMAIL" \
         --allow-root
 
-    if ! wp user get "$WP_USER" --allow-root >/dev/null 2>&1; then
-        wp user create "$WP_USER" "$WP_USER_EMAIL" \
-            --role=subscriber \
-            --user_pass="$WP_USER_PASSWORD" \
-            --display_name="Regular User" \
-            --allow-root
-    fi
-else
-    echo "WordPress already installed."
+    wp user create "$WP_USER" "$WP_USER_EMAIL" \
+        --role=subscriber \
+         --user_pass="$WP_USER_PASSWORD" \
+        --display_name="Regular User" \
+        --allow-root
 fi
 
-echo "starting php"
 
 exec php-fpm8.4 -F
