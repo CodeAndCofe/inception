@@ -8,9 +8,6 @@ RUN apt-get update -y && \
 
 EXPOSE 3306
 
-RUN chown root:root /etc/mysql/mariadb.conf.d/50-server.cnf \
-    && chmod 644 /etc/mysql/mariadb.conf.d/50-server.cnf
-
 COPY ./tools/maria.sh /app/script.sh
 
 RUN chmod +x /app/script.sh
