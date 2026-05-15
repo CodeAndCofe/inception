@@ -42,5 +42,4 @@ if [ ! -f wp-config.php ]; then
         --allow-root
 fi
 
-
 exec php-fpm8.4 -F
